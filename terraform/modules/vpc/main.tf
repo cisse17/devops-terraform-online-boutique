@@ -1,7 +1,6 @@
-# ========================================
+
 # MODULE VPC - BLACK FRIDAY SURVIVAL
-# Semaine 1 : Version simplifiée
-# ========================================
+# Semaine 1 : Version ÉCONOMIQUE (sans NAT Gateway)
 
 # Récupérer les zones de disponibilité disponibles
 data "aws_availability_zones" "available" {
@@ -34,7 +33,7 @@ resource "aws_internet_gateway" "main" {
   )
 }
 
-# Subnets Publics (pour Load Balancers et NAT Gateway)
+# Subnets Publics (pour Load Balancers ET Nodes EKS)
 resource "aws_subnet" "public" {
   count                   = 3
   vpc_id                  = aws_vpc.main.id
@@ -52,7 +51,7 @@ resource "aws_subnet" "public" {
   )
 }
 
-# Subnets Privés (pour EKS Nodes)
+# Subnets Privés (optionnels - gardés pour évolution future)
 resource "aws_subnet" "private" {
   count             = 3
   vpc_id            = aws_vpc.main.id
@@ -67,35 +66,6 @@ resource "aws_subnet" "private" {
       "kubernetes.io/cluster/${var.cluster_name}" = "shared"
     }
   )
-}
-
-# Elastic IP pour NAT Gateway (1 seul pour économiser - Semaine 1)
-resource "aws_eip" "nat" {
-  domain = "vpc"
-
-  tags = merge(
-    var.tags,
-    {
-      Name = "${var.project_name}-eip-nat-${var.environment}"
-    }
-  )
-
-  depends_on = [aws_internet_gateway.main]
-}
-
-# NAT Gateway (1 seul pour Semaine 1 - économie de coûts)
-resource "aws_nat_gateway" "main" {
-  allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public[0].id
-
-  tags = merge(
-    var.tags,
-    {
-      Name = "${var.project_name}-nat-${var.environment}"
-    }
-  )
-
-  depends_on = [aws_internet_gateway.main]
 }
 
 # Route Table pour Subnets Publics
@@ -122,14 +92,9 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# Route Table pour Subnets Privés (partagée - Semaine 1)
+# Route Table pour Subnets Privés (sans route Internet pour l'instant)
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
-
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.main.id
-  }
 
   tags = merge(
     var.tags,
