@@ -10,7 +10,7 @@ variable "cluster_name" {
 variable "kubernetes_version" {
   description = "Version de Kubernetes"
   type        = string
-  default     = "1.28"
+  default     = ""
 }
 
 variable "vpc_id" {

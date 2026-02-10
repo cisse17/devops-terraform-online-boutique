@@ -59,7 +59,8 @@ resource "aws_eks_cluster" "main" {
   version  = var.kubernetes_version
 
   vpc_config {
-    subnet_ids              = concat(var.private_subnet_ids, var.public_subnet_ids)
+    # subnet_ids              = concat(var.private_subnet_ids, var.public_subnet_ids)
+    subnet_ids              =  var.public_subnet_ids  # ← Nodes dans subnets publics
     endpoint_private_access = true
     endpoint_public_access  = true
     security_group_ids      = [aws_security_group.cluster.id]
@@ -114,8 +115,11 @@ resource "aws_eks_node_group" "main" {
   cluster_name    = aws_eks_cluster.main.name
   node_group_name = "${var.cluster_name}-node-group"
   node_role_arn   = aws_iam_role.node.arn
-  subnet_ids      = var.private_subnet_ids
-
+  # subnet_ids      = var.private_subnet_ids
+  subnet_ids = var.public_subnet_ids  # je le met temporaire dans les subnets publics pour éviter les problèmes de NAT Gateway (car on n'en a pas dans cette version économique)
+  
+  ami_type = "AL2_x86_64"
+  
   scaling_config {
     desired_size = var.node_desired_size
     max_size     = var.node_max_size
