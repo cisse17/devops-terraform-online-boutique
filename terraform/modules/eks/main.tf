@@ -1,6 +1,5 @@
-# ========================================
+
 # MODULE EKS - BLACK FRIDAY SURVIVAL
-# ========================================
 
 # IAM Role pour le Cluster EKS
 resource "aws_iam_role" "cluster" {
@@ -119,7 +118,7 @@ resource "aws_eks_node_group" "main" {
   subnet_ids = var.public_subnet_ids  # je le met temporaire dans les subnets publics pour éviter les problèmes de NAT Gateway (car on n'en a pas dans cette version économique)
   
   ami_type = "AL2_x86_64"
-  
+
   scaling_config {
     desired_size = var.node_desired_size
     max_size     = var.node_max_size
