@@ -24,3 +24,5 @@ Ce projet déploie et optimise **Online Boutique** (Google microservices demo) s
 - **Monitoring:** Prometheus + Grafana + CloudWatch
 - **Load Testing:** Locust + K6
 - **Application:** Online Boutique (11 microservices)
+
+CI test 03/04/2026 16:21:18
