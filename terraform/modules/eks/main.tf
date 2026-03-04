@@ -157,4 +157,11 @@ resource "aws_cloudwatch_log_group" "cluster" {
   retention_in_days = var.log_retention_days
 
   tags = var.tags
+
+
+  # C'est pour Gérer le cas où EKS crée automatiquement le log group
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes        = [name]
+  }
 }
