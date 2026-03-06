@@ -25,9 +25,8 @@ Ce projet déploie et optimise **Online Boutique** (Google microservices demo) s
 - **Load Testing:** Locust + K6
 - **Application:** Online Boutique (11 microservices)
 
-<<<<<<< HEAD
 CI test 03/04/2026 16:21:18
-=======
+
 ### Architecture AWS
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -370,4 +369,3 @@ Ce projet est réalisé dans le cadre d'un projet pédagogique HETIC.
 ---
 
 **🎯 Objectif: Tenir 90K users le jour J !** 🚀
->>>>>>> origin/test/charges
