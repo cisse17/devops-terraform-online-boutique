@@ -31,7 +31,7 @@ provider "aws" {
 # Variables locales
 locals {
   cluster_name = "${var.project_name}-eks-${var.environment}"
-  
+
   common_tags = {
     Project     = var.project_name
     Environment = var.environment
@@ -62,12 +62,12 @@ module "eks" {
   private_subnet_ids = module.vpc.private_subnet_ids
   public_subnet_ids  = module.vpc.public_subnet_ids
 
-  node_desired_size    = var.node_desired_size
-  node_min_size        = var.node_min_size
-  node_max_size        = var.node_max_size
-  node_instance_types  = var.node_instance_types
-  node_disk_size       = var.node_disk_size
-  log_retention_days   = var.log_retention_days
+  node_desired_size   = var.node_desired_size
+  node_min_size       = var.node_min_size
+  node_max_size       = var.node_max_size
+  node_instance_types = var.node_instance_types
+  node_disk_size      = var.node_disk_size
+  log_retention_days  = var.log_retention_days
 
   tags = local.common_tags
 
