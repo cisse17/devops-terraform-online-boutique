@@ -1,0 +1,38 @@
+name: deploy-dev
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name black-friday-eks-dev
+
+      - name: Deploy app
+        run: |
+          kubectl apply -f kubernetes/
+
+      - name: Deploy monitoring
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+          helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+            -n monitoring \
+            --create-namespace \
+            -f observability/prometheus/values.yaml \
+            --set prometheus-node-exporter.enabled=false \
+            --set nodeExporter.enabled=false

@@ -1,0 +1,48 @@
+name: kubernetes-validate
+
+on:
+  pull_request:
+    paths:
+      - "kubernetes/**"
+      - ".github/workflows/kubernetes-validate.yml"
+  push:
+    branches: [ "main" ]
+    paths:
+      - "kubernetes/**"
+      - ".github/workflows/kubernetes-validate.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools (kustomize + kubeconform)
+        run: |
+          set -e
+          KUSTOMIZE_VERSION=5.6.0
+          curl -sSLo kustomize.tar.gz https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
+          tar -xzf kustomize.tar.gz
+          sudo mv kustomize /usr/local/bin/kustomize
+
+          KUBECONFORM_VERSION=0.6.7
+          curl -sSLo kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/download/v${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz
+          tar -xzf kubeconform.tar.gz
+          sudo mv kubeconform /usr/local/bin/kubeconform
+
+      - name: Build manifests (kustomize)
+        run: |
+          set -e
+          if [ -d "kubernetes/overlays/dev" ]; then
+            kustomize build kubernetes/overlays/dev > /tmp/manifests.yaml
+          elif [ -f "kubernetes/base/online-boutique.yaml" ]; then
+            cat kubernetes/base/online-boutique.yaml > /tmp/manifests.yaml
+          else
+            echo "No manifests found (expected kubernetes/overlays/dev or kubernetes/base/online-boutique.yaml)."
+            exit 1
+          fi
+
+      - name: Validate manifests (kubeconform)
+        run: |
+          set -e
+          kubeconform -strict -ignore-missing-schemas /tmp/manifests.yaml

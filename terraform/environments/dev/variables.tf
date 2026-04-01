@@ -1,31 +1,43 @@
 # ========================================
-# VARIABLES MODULE EKS
+# VARIABLES ENVIRONNEMENT DEV
 # ========================================
 
-variable "cluster_name" {
-  description = "Nom du cluster EKS"
+variable "aws_region" {
+  description = "Région AWS"
   type        = string
+  default     = "us-east-1"
 }
 
+variable "project_name" {
+  description = "Online Boutique Black Friday Survival"
+  type        = string
+  default     = "black-friday-bassirou"
+}
+
+variable "environment" {
+  description = "Environnement developpement"
+  type        = string
+  default     = "dev"
+}
+
+variable "owner" {
+  description = "Propriétaire du projet"
+  type        = string
+  default     = "hetic-student"
+}
+
+# VPC Configuration
+variable "vpc_cidr" {
+  description = "CIDR block pour le VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+# EKS Configuration
 variable "kubernetes_version" {
   description = "Version de Kubernetes"
   type        = string
-  default     = ""
-}
-
-variable "vpc_id" {
-  description = "ID du VPC"
-  type        = string
-}
-
-variable "private_subnet_ids" {
-  description = "Liste des IDs des subnets privés"
-  type        = list(string)
-}
-
-variable "public_subnet_ids" {
-  description = "Liste des IDs des subnets publics"
-  type        = list(string)
+  default     = "1.29"
 }
 
 variable "node_desired_size" {
@@ -59,9 +71,17 @@ variable "node_disk_size" {
 }
 
 variable "log_retention_days" {
-  description = "Durée de rétention des logs CloudWatch en jours"
+  description = "Durée de rétention des logs CloudWatch"
   type        = number
   default     = 7
+}
+
+
+
+
+variable "cluster_name" {
+  description = "Nom du cluster EKS (pour les tags des subnets)"
+  type        = string
 }
 
 variable "tags" {
