@@ -36,6 +36,26 @@ resource "aws_security_group" "cluster" {
   description = "Security group pour le cluster EKS"
   vpc_id      = var.vpc_id
 
+
+  # Règle entrante stricte
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # À restreindre en prod
+    description = "HTTPS from anywhere"
+  }
+
+  # Bloquer SSH depuis Internet
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]  # Seulement depuis le VPC
+    description = "SSH from VPC only"
+  }
+
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -136,7 +156,11 @@ resource "aws_eks_node_group" "main" {
     var.tags,
     {
       Name = "${var.cluster_name}-node-group"
+
+      "k8s.io/cluster-autoscaler/enabled" = "true"
+      "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
     }
+    
   )
 
   depends_on = [
