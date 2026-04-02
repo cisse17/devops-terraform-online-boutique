@@ -31,19 +31,19 @@ variable "public_subnet_ids" {
 variable "node_desired_size" {
   description = "Nombre désiré de nodes"
   type        = number
-  default     = 2
+  default     = 3
 }
 
 variable "node_min_size" {
   description = "Nombre minimum de nodes"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "node_max_size" {
   description = "Nombre maximum de nodes"
   type        = number
-  default     = 5
+  default     = 10
 }
 
 variable "node_instance_types" {
