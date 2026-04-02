@@ -93,6 +93,14 @@ resource "aws_eks_cluster" "main" {
     aws_iam_role_policy_attachment.cluster_policy,
     aws_iam_role_policy_attachment.cluster_vpc_policy,
   ]
+
+  # pour le secret management des secrets du cluster
+  #  encryption_config {
+  #   provider {
+  #     key_arn = aws_kms_key.eks_secrets.arn
+  #   }
+  #   resources = ["secrets"]
+  # }
 }
 
 # IAM Role pour les Nodes

@@ -23,7 +23,7 @@ variable "environment" {
 variable "owner" {
   description = "Propriétaire du projet"
   type        = string
-  default     = "hetic-student"
+  default     = "hetic-student-2026-group-11"
 }
 
 # VPC Configuration

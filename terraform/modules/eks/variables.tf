@@ -31,13 +31,13 @@ variable "public_subnet_ids" {
 variable "node_desired_size" {
   description = "Nombre désiré de nodes"
   type        = number
-  default     = 3
+  default     = 4
 }
 
 variable "node_min_size" {
   description = "Nombre minimum de nodes"
   type        = number
-  default     = 2
+  default     = 3
 }
 
 variable "node_max_size" {
@@ -49,7 +49,7 @@ variable "node_max_size" {
 variable "node_instance_types" {
   description = "Types d'instances pour les nodes"
   type        = list(string)
-  default     = ["t3.medium"]
+  default     = ["t3.large"]
 }
 
 variable "node_disk_size" {
