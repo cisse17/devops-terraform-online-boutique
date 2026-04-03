@@ -1,4 +1,4 @@
-# Post-Mortem Black Friday - 25 Novembre 2026
+# Post-Mortem Black Friday - 2026
 
 ## Résumé Exécutif
 - **Durée événement :** 12h (8h-20h)
