@@ -57,3 +57,5 @@ secrets/
 # Temporary
 *.tmp
 temp/
+
+cleanup-*

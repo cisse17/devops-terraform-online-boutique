@@ -1,6 +1,3 @@
-# ========================================
-# VARIABLES MODULE VPC
-# ========================================
 
 variable "project_name" {
   description = "Nom du projet"

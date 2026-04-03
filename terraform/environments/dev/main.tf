@@ -1,7 +1,3 @@
-# ========================================
-# ENVIRONNEMENT DEV - BLACK FRIDAY SURVIVAL
-# Semaine 1 : Déploiement VPC + EKS
-# ========================================
 
 terraform {
   required_version = ">= 1.0"
@@ -14,7 +10,7 @@ terraform {
   }
 }
 
-# Configuration du provider AWS
+
 provider "aws" {
   region = var.aws_region
 

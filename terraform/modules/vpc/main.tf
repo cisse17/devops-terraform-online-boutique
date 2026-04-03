@@ -1,13 +1,8 @@
 
-# MODULE VPC - BLACK FRIDAY SURVIVAL
-# Semaine 1 : Version ÉCONOMIQUE (sans NAT Gateway)
-
-# Récupérer les zones de disponibilité disponibles
 data "aws_availability_zones" "available" {
   state = "available"
 }
 
-# VPC Principal
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
@@ -21,7 +16,6 @@ resource "aws_vpc" "main" {
   )
 }
 
-# Internet Gateway
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
@@ -33,7 +27,6 @@ resource "aws_internet_gateway" "main" {
   )
 }
 
-# Subnets Publics (pour Load Balancers ET Nodes EKS)
 resource "aws_subnet" "public" {
 
   count                   = 3
@@ -52,7 +45,6 @@ resource "aws_subnet" "public" {
   )
 }
 
-# Subnets Privés (optionnels - gardés pour évolution future)
 resource "aws_subnet" "private" {
   count             = 3
   vpc_id            = aws_vpc.main.id
@@ -69,7 +61,6 @@ resource "aws_subnet" "private" {
   )
 }
 
-# Route Table pour Subnets Publics
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -86,7 +77,6 @@ resource "aws_route_table" "public" {
   )
 }
 
-# Association Route Table Public
 resource "aws_route_table_association" "public" {
 
   count          = 3
@@ -94,7 +84,6 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# Route Table pour Subnets Privés (sans route Internet pour l'instant)
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
@@ -106,7 +95,6 @@ resource "aws_route_table" "private" {
   )
 }
 
-# Association Route Tables Privés
 resource "aws_route_table_association" "private" {
 
   count          = 3

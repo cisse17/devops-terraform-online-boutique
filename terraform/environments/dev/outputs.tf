@@ -1,8 +1,4 @@
-# ========================================
-# OUTPUTS ENVIRONNEMENT DEV
-# ========================================
 
-# VPC Outputs
 output "vpc_id" {
   description = "ID du VPC"
   value       = module.vpc.vpc_id
@@ -23,7 +19,7 @@ output "private_subnet_ids" {
   value       = module.vpc.private_subnet_ids
 }
 
-# EKS Outputs
+
 output "cluster_name" {
   description = "Nom du cluster EKS"
   value       = module.eks.cluster_name
@@ -44,7 +40,6 @@ output "node_group_status" {
   value       = module.eks.node_group_status
 }
 
-# Commande pour configurer kubectl
 output "configure_kubectl" {
   description = "Commande pour configurer kubectl"
   value       = "aws eks update-kubeconfig --region ${var.aws_region} --name ${module.eks.cluster_name}"
